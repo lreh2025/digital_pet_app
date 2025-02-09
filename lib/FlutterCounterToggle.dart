@@ -1,42 +1,57 @@
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CounterImageToggleApp(),
+      title: 'Flutter Assignment',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter App'),
     );
   }
 }
 
-class CounterImageToggleApp extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
   @override
-  _CounterImageToggleAppState createState() => _CounterImageToggleAppState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _CounterImageToggleAppState extends State<CounterImageToggleApp>
-    with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   int _counter = 0;
-  bool _showFirstImage = true;
+  bool _isFirstImage = true;
   late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
+  late CurvedAnimation _curvedAnimation;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
-    _fadeAnimation = CurvedAnimation(
+    _curvedAnimation = CurvedAnimation(
       parent: _animationController,
       curve: Curves.easeInOut,
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _incrementCounter() {
@@ -46,30 +61,47 @@ class _CounterImageToggleAppState extends State<CounterImageToggleApp>
   }
 
   void _toggleImage() {
-    _animationController.forward(from: 0.0);
     setState(() {
-      _showFirstImage = !_showFirstImage;
+      _isFirstImage = !_isFirstImage;
+      if (_animationController.isCompleted) {
+        _animationController.reverse();
+      } else {
+        _animationController.forward();
+      }
     });
   }
 
-  void _resetApp() {
-    showDialog(
+  Future<void> _resetAll(BuildContext context) async {
+    return showDialog<void>(
       context: context,
+      barrierDismissible: false, // user must tap a button to close!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Confirm Reset"),
-          content: Text("Are you sure you want to reset the app?"),
-          actions: [
+          title: const Text('Confirm Reset'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure you want to reset the counter and image?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
             TextButton(
-              child: Text("Cancel"),
-              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
             TextButton(
-              child: Text("Reset"),
+              child: const Text('Reset'),
               onPressed: () {
                 setState(() {
                   _counter = 0;
-                  _showFirstImage = true;
+                  _isFirstImage = true;
+                  //Optional: Reset Animation
+                  if (_animationController.isCompleted) {
+                    _animationController.reverse();
+                  }
                 });
                 Navigator.of(context).pop();
               },
@@ -81,44 +113,53 @@ class _CounterImageToggleAppState extends State<CounterImageToggleApp>
   }
 
   @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Counter & Image Toggle App")),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Counter: $_counter", style: TextStyle(fontSize: 24)),
-            SizedBox(height: 20),
+          children: <Widget>[
+            // Counter
+            const Text(
+              'Counter Value:',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              '$_counter',
+              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+            ),
             ElevatedButton(
               onPressed: _incrementCounter,
-              child: Text("Increment"),
+              child: const Text('Increment'),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 20),
+
+            // Image Toggle
             FadeTransition(
-              opacity: _fadeAnimation,
+              opacity: _curvedAnimation,
               child: Image.asset(
-                _showFirstImage ? 'assets/image1.png' : 'assets/image2.png',
+                _isFirstImage ? 'assets/image1.png' : 'assets/image2.png',
                 width: 200,
                 height: 200,
               ),
             ),
-            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _toggleImage,
-              child: Text("Toggle Image"),
+              child: const Text('Toggle Image'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
+
+            // Reset Button (For Graduate Students)
             ElevatedButton(
-              onPressed: _resetApp,
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: Text("Reset", style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red, // Visually distinct
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () => _resetAll(context),
+              child: const Text('Reset All'),
             ),
           ],
         ),
@@ -126,3 +167,4 @@ class _CounterImageToggleAppState extends State<CounterImageToggleApp>
     );
   }
 }
+
