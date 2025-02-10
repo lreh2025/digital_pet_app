@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -29,7 +28,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int _counter = 0;
   bool _isFirstImage = true;
   late AnimationController _animationController;
@@ -80,8 +80,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           title: const Text('Confirm Reset'),
           content: const SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
-                Text('Are you sure you want to reset the counter and image?'),
+              children: <Widget>[
+                const Text(
+                    'Are you sure you want to reset the counter and image?'),
               ],
             ),
           ),
@@ -167,4 +168,3 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 }
-

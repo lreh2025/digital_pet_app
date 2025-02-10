@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-<<<<<<< HEAD
       home: DrawingApp(),
     );
   }
@@ -87,16 +86,10 @@ class _DrawingAppState extends State<DrawingApp> {
           });
         },
         child: Icon(Icons.clear),
-=======
-      home: Scaffold(
-        appBar: AppBar(title: Text("Flutter App")),
-        body: Center(child: Text("Hello, Flutter!")),
->>>>>>> ad9b1693614e643a9580d5d5940b062dca12a65b
       ),
     );
   }
 }
-<<<<<<< HEAD
 
 class MyPainter extends CustomPainter {
   final List<List<Offset>> lines;
@@ -160,5 +153,3 @@ class MyPainter extends CustomPainter {
     return true;
   }
 }
-=======
->>>>>>> ad9b1693614e643a9580d5d5940b062dca12a65b

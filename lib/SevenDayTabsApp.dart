@@ -5,6 +5,8 @@ void main() {
 }
 
 class SevenDayApp extends StatelessWidget {
+  const SevenDayApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,6 +16,8 @@ class SevenDayApp extends StatelessWidget {
 }
 
 class SevenDayHome extends StatelessWidget {
+  const SevenDayHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

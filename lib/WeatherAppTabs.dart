@@ -6,6 +6,8 @@ void main() {
 }
 
 class WeatherApp extends StatelessWidget {
+  const WeatherApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +28,8 @@ class WeatherHomePage extends StatelessWidget {
     "Sunday"
   ];
   final Random random = Random();
+
+  WeatherHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +62,11 @@ class WeatherInfo extends StatelessWidget {
   final int temperature;
   final String condition;
 
-  WeatherInfo(
-      {required this.day, required this.temperature, required this.condition});
+  const WeatherInfo(
+      {super.key,
+      required this.day,
+      required this.temperature,
+      required this.condition});
 
   @override
   Widget build(BuildContext context) {
